@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Balanza de Responsabilidad</title>
+
+<style>
+body{
+    font-family:Arial, sans-serif;
+    background:#eef5ff;
+    text-align:center;
+    margin:0;
+    padding:20px;
+}
+
+h1{
+    color:#1d3557;
+}
+
+#game{
+    max-width:1000px;
+    margin:auto;
+}
+
+/* CAJA DE FACTORES */
+
+#cajaPiezas{
+    width:90%;
+    max-width:850px;
+    margin:20px auto;
+    padding:15px;
+    background:white;
+    border:2px solid #888;
+    border-radius:12px;
+}
+
+#cajaPiezas h3{
+    margin-top:0;
+}
+
+.pieza{
+    display:inline-block;
+    margin:6px;
+    padding:10px 14px;
+    background:#ffd8a8;
+    border:2px solid #e67700;
+    border-radius:8px;
+    cursor:grab;
+    user-select:none;
+    font-size:14px;
+}
+
+.pieza:hover{
+    transform:scale(1.05);
+}
+
+/* BALANZA */
+
+.balanza-container{
+    position:relative;
+    width:700px;
+    height:350px;
+    margin:20px auto;
+}
+
+.base{
+    position:absolute;
+    bottom:0;
+    left:50%;
+    transform:translateX(-50%);
+    width:160px;
+    height:30px;
+    background:#555;
+    border-radius:8px;
+}
+
+.soporte{
+    position:absolute;
+    bottom:30px;
+    left:50%;
+    transform:translateX(-50%);
+    width:18px;
+    height:180px;
+    background:#666;
+}
+
+.barra{
+    position:absolute;
+    left:50%;
+    top:90px;
+    transform:translateX(-50%) rotate(-10deg);
+    transform-origin:center center;
+    width:520px;
+    height:12px;
+    background:#444;
+    border-radius:10px;
+    transition:1s ease;
+}
+
+.cuerda{
+    position:absolute;
+    width:4px;
+    height:55px;
+    top:12px;
+    background:#666;
+}
+
+.cuerda-izq{
+    left:55px;
+}
+
+.cuerda-der{
+    right:55px;
+}
+
+.plato{
+    position:absolute;
+    width:180px;
+    height:12px;
+    background:#555;
+    bottom:-55px;
+    border-radius:4px;
+}
+
+.izq{
+    left:-30px;
+}
+
+.der{
+    right:-30px;
+}
+
+.cubos{
+    position:absolute;
+    width:180px;
+    min-height:60px;
+    bottom:15px;
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:5px;
+}
+
+.cubos-izq{
+    left:-30px;
+}
+
+.cubos-der{
+    right:-30px;
+}
+
+.cubo{
+    width:28px;
+    height:28px;
+    background:#4dabf7;
+    border:2px solid #1864ab;
+}
+
+.factor-colocado{
+    width:75px;
+    min-height:40px;
+    padding:4px;
+    border-radius:6px;
+    background:#ff8787;
+    border:2px solid #c92a2a;
+    font-size:10px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    animation:caer .4s ease;
+}
+
+@keyframes caer{
+    from{
+        transform:translateY(-60px);
+        opacity:0;
+    }
+    to{
+        transform:translateY(0);
+        opacity:1;
+    }
+}
+
+/* ETIQUETAS */
+
+.personas{
+    display:flex;
+    justify-content:space-around;
+    width:700px;
+    margin:auto;
+}
+
+.etiqueta{
+    font-size:24px;
+    font-weight:bold;
+    color:#1d3557;
+}
+
+#mensaje{
+    margin-top:30px;
+    max-width:850px;
+    margin-left:auto;
+    margin-right:auto;
+    line-height:1.6;
+    font-size:19px;
+    color:#0b7285;
+    font-weight:bold;
+}
+
+.instrucciones{
+    max-width:900px;
+    margin:auto;
+    color:#444;
+}
+
+@media(max-width:800px){
+
+    .balanza-container{
+        transform:scale(.8);
+        transform-origin:top center;
+        margin-bottom:-40px;
+    }
+
+    .personas{
+        width:95%;
+    }
+}
+</style>
+</head>
+<body>
+
+<div id="game">
+
+<h1>Balanza de Responsabilidad</h1>
+
+<p class="instrucciones">
+Arrastra cada factor desde la caja hasta el plato del profesor y observa cómo cambia el equilibrio de la balanza.
+</p>
+
+<div id="cajaPiezas">
+
+<h3>Factores</h3>
+
+<div class="pieza" draggable="true">Autoridad</div>
+
+<div class="pieza" draggable="true">
+Responsabilidad profesional
+</div>
+
+<div class="pieza" draggable="true">
+Asimetría de poder
+</div>
+
+<div class="pieza" draggable="true">
+Confianza institucional
+</div>
+
+<div class="pieza" draggable="true">
+Deber de cuidado
+</div>
+
+</div>
+
+<div class="balanza-container">
+
+<div class="base"></div>
+
+<div class="soporte"></div>
+
+<div class="barra" id="barra">
+
+<div class="cuerda cuerda-izq"></div>
+<div class="cuerda cuerda-der"></div>
+
+<div class="plato izq"></div>
+<div class="plato der"></div>
+
+<div class="cubos cubos-izq">
+<div class="cubo"></div>
+</div>
+
+<div
+class="cubos cubos-der"
+id="cubosProfesor"
+ondragover="permitirSoltar(event)"
+ondrop="soltarPieza(event)">
+</div>
+
+</div>
+
+</div>
+
+<div class="personas">
+<div class="etiqueta">Alumna</div>
+<div class="etiqueta">Profesor</div>
+</div>
+
+<div id="mensaje"></div>
+
+</div>
+
+<script>
+
+let pesos = 0;
+let piezaArrastrada = null;
+
+document.querySelectorAll(".pieza").forEach(pieza=>{
+
+    pieza.addEventListener("dragstart",function(){
+        piezaArrastrada=this;
+    });
+
+});
+
+function permitirSoltar(e){
+    e.preventDefault();
+}
+
+function soltarPieza(e){
+
+    e.preventDefault();
+
+    if(!piezaArrastrada || pesos>=5){
+        return;
+    }
+
+    pesos++;
+
+    const factor = document.createElement("div");
+
+    factor.className="factor-colocado";
+
+    factor.textContent=
+    piezaArrastrada.textContent;
+
+    document
+    .getElementById("cubosProfesor")
+    .appendChild(factor);
+
+    piezaArrastrada.remove();
+
+    actualizarBalanza();
+}
+
+function actualizarBalanza(){
+
+    const barra=document.getElementById("barra");
+
+    switch(pesos){
+
+        case 1:
+            barra.style.transform=
+            "translateX(-50%) rotate(-5deg)";
+            break;
+
+        case 2:
+            barra.style.transform=
+            "translateX(-50%) rotate(0deg)";
+            break;
+
+        case 3:
+            barra.style.transform=
+            "translateX(-50%) rotate(8deg)";
+            break;
+
+        case 4:
+            barra.style.transform=
+            "translateX(-50%) rotate(15deg)";
+            break;
+
+        case 5:
+
+            barra.style.transform=
+            "translateX(-50%) rotate(22deg)";
+
+            document
+            .getElementById("mensaje")
+            .innerHTML=
+            "Al observar la balanza, puede apreciarse cómo diversos factores vinculados a la posición de autoridad y a la responsabilidad profesional del profesor adquieren un peso significativo en la situación. Esta representación busca mostrar que, dentro de una relación educativa, las diferencias de poder implican responsabilidades adicionales para quien ocupa el rol de docente y tiene el deber de cuidar, orientar y mantener límites adecuados.";
+
+            break;
+    }
+}
+
+</script>
+
+</body>
+</html>

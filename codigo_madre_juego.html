@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Point & Click</title>
+
+<style>
+
+body{
+    margin:0;
+    overflow:hidden;
+    background:#000;
+    font-family:Arial,sans-serif;
+}
+
+/* PAREDES */
+
+.pared{
+    position:relative;
+    width:100vw;
+    height:100vh;
+    display:none;
+}
+
+.pared img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+/* SOLO PROFESOR */
+
+#hoverWall{
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+
+    opacity:0;
+    transition:.25s;
+
+    pointer-events:none;
+}
+
+#escritorioHover{
+    position:absolute;
+
+    left:25%;
+    bottom:15%;
+
+    width:50%;
+    height:25%;
+
+    cursor:pointer;
+}
+
+/* ESCRITORIO */
+
+#vistaEscritorio{
+
+    display:none;
+
+    position:absolute;
+
+    top:0;
+    left:0;
+
+    width:100vw;
+    height:100vh;
+}
+
+#vistaEscritorio img{
+
+    width:100%;
+    height:100%;
+
+    object-fit:cover;
+}
+
+#volver{
+
+    position:absolute;
+
+    top:20px;
+    left:20px;
+
+    z-index:5000;
+
+    padding:10px 20px;
+
+    cursor:pointer;
+}
+
+/* FLECHAS */
+
+#izq,
+#der{
+
+    position:fixed;
+
+    top:50%;
+
+    transform:translateY(-50%);
+
+    width:70px;
+    height:70px;
+
+    background:rgba(0,0,0,.7);
+
+    border:2px solid white;
+
+    color:white;
+
+    font-size:30px;
+
+    cursor:pointer;
+
+    z-index:9999;
+}
+
+#izq{
+    left:20px;
+}
+
+#der{
+    right:20px;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- PROFESOR -->
+
+<div id="paredProfesor" class="pared">
+
+    <img
+        src="pared_profesor.png"
+        id="baseWall"
+    >
+
+    <img
+        src="pared_profesor_hover.png"
+        id="hoverWall"
+    >
+
+    <div id="escritorioHover"></div>
+
+</div>
+
+<!-- CASILLEROS -->
+
+<div id="paredCasilleros" class="pared">
+
+    <img src="pared_casilleros.png">
+
+</div>
+
+<!-- FRISO -->
+
+<div id="paredFriso" class="pared">
+
+    <img src="pared_friso.png">
+
+</div>
+
+<!-- PUERTA -->
+
+<div id="paredPuerta" class="pared">
+
+    <img src="pared_puerta.png">
+
+</div>
+
+<!-- ESCRITORIO -->
+
+<div id="vistaEscritorio">
+
+    <button id="volver">← Volver</button>
+
+    <img src="escritorio_puzzle.png">
+
+</div>
+
+<!-- FLECHAS -->
+
+<button id="izq">◀</button>
+<button id="der">▶</button>
+
+<script>
+
+/* PAREDES */
+
+let paredActual = 0;
+
+const paredes = [
+
+    document.getElementById("paredProfesor"),
+    document.getElementById("paredCasilleros"),
+    document.getElementById("paredFriso"),
+    document.getElementById("paredPuerta")
+
+];
+
+function mostrarPared(){
+
+    paredes.forEach(p=>{
+
+        p.style.display="none";
+
+    });
+
+    paredes[paredActual].style.display="block";
+
+}
+
+mostrarPared();
+
+/* GIRAR DERECHA */
+
+document
+.getElementById("der")
+.addEventListener("click",()=>{
+
+    paredActual++;
+
+    if(paredActual > 3){
+
+        paredActual = 0;
+
+    }
+
+    mostrarPared();
+
+});
+
+/* GIRAR IZQUIERDA */
+
+document
+.getElementById("izq")
+.addEventListener("click",()=>{
+
+    paredActual--;
+
+    if(paredActual < 0){
+
+        paredActual = 3;
+
+    }
+
+    mostrarPared();
+
+});
+
+/* HOVER ESCRITORIO */
+
+const hitbox =
+document.getElementById("escritorioHover");
+
+const hover =
+document.getElementById("hoverWall");
+
+hitbox.addEventListener("mouseenter",()=>{
+
+    hover.style.opacity="1";
+
+});
+
+hitbox.addEventListener("mouseleave",()=>{
+
+    hover.style.opacity="0";
+
+});
+
+/* ENTRAR ESCRITORIO */
+
+hitbox.addEventListener("click",()=>{
+
+    document.getElementById("vistaEscritorio")
+    .style.display="block";
+
+    paredes[paredActual].style.display="none";
+
+    document.getElementById("izq")
+    .style.display="none";
+
+    document.getElementById("der")
+    .style.display="none";
+
+});
+
+/* VOLVER */
+
+document
+.getElementById("volver")
+.addEventListener("click",()=>{
+
+    document.getElementById("vistaEscritorio")
+    .style.display="none";
+
+    mostrarPared();
+
+    document.getElementById("izq")
+    .style.display="block";
+
+    document.getElementById("der")
+    .style.display="block";
+
+});
+
+</script>
+
+</body>
+</html>

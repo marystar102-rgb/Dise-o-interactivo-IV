@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Encontrar la Salida</title>
+
+<style>
+
+body{
+    margin:0;
+    background:#1f2430;
+    color:white;
+    font-family:Arial,sans-serif;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+}
+
+#menu,
+#passwordScreen,
+#game,
+#final{
+    text-align:center;
+}
+
+.hidden{
+    display:none !important;
+}
+
+h1{
+    color:#ffd166;
+}
+
+button{
+    padding:15px 35px;
+    border:none;
+    border-radius:10px;
+    font-size:1rem;
+    cursor:pointer;
+    background:#4e73df;
+    color:white;
+}
+
+button:hover{
+    background:#395dcc;
+}
+
+#maze{
+    display:grid;
+    gap:2px;
+    margin:20px auto;
+}
+
+.cell{
+    width:30px;
+    height:30px;
+}
+
+.wall{
+    background:#29384a;
+}
+
+.path{
+    background:#e8e8e8;
+}
+
+.player{
+    background:#2ecc71;
+    box-shadow:0 0 10px #2ecc71;
+}
+
+.exit{
+    background:#e74c3c;
+    box-shadow:0 0 12px #ff6b6b;
+}
+
+#message{
+    min-height:40px;
+    color:#ffd166;
+    margin-top:10px;
+    font-style:italic;
+}
+
+#thoughts{
+    height:40px;
+    color:rgba(255,255,255,.7);
+    font-style:italic;
+    transition:1s;
+}
+
+.map-container{
+    margin:20px auto;
+    width:90%;
+    max-width:900px;
+    background:#ffffff;
+    color:#222;
+    border-radius:15px;
+    padding:25px;
+}
+
+.map-title{
+    font-size:24px;
+    font-weight:bold;
+    margin-bottom:20px;
+}
+
+.network{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:25px;
+}
+
+.node{
+    background:#4e73df;
+    color:white;
+    padding:15px;
+    border-radius:12px;
+    min-width:150px;
+}
+
+.center{
+    background:#27ae60;
+}
+
+@keyframes pulse{
+
+    0%{
+        opacity:0.5;
+    }
+
+    50%{
+        opacity:1;
+    }
+
+    100%{
+        opacity:0.5;
+    }
+
+}
+
+#passwordGrid{
+
+    display:flex;
+    flex-direction:column;
+
+    align-items:flex-start;
+
+    width:max-content;
+
+    margin:20px auto;
+}
+
+.row{
+
+    display:flex;
+
+    gap:10px;
+
+    margin:0;
+}
+
+
+.passCell{
+
+    width:80px;
+    height:80px;
+
+    border:3px solid #c44;
+
+    background:#fff;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:45px;
+
+    cursor:pointer;
+}
+
+.passCell.hiddenCell{
+
+    visibility:hidden;
+}
+
+#passwordScreen{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+
+#checkPassword{
+
+    display:block;
+    margin:20px auto;
+
+}
+
+#passwordMsg{
+
+    text-align:center;
+    min-height:30px;
+
+}
+</style>
+</head>
+<body>
+
+<div id="menu">
+
+    <h1>Encontrar la salida</h1>
+
+    <p style="max-width:650px">
+        Solo debes cruzar el laberinto para encontrar la salida.
+    </p>
+
+    <button id="startBtn">Iniciar</button>
+
+</div>
+
+<div id="passwordScreen" class="hidden">
+
+    <h1>Acceso restringido</h1>
+
+    <p>
+        Coloca las figuras en la disposición correcta.
+    </p>
+
+    <div id="passwordGrid">
+
+    <div class="row">
+        <div class="passCell" data-index="0"></div>
+        <div class="passCell" data-index="1"></div>
+    </div>
+
+    <div class="row">
+        <div class="passCell" data-index="2"></div>
+        <div class="passCell" data-index="3"></div>
+        <div class="passCell" data-index="4"></div>
+    </div>
+
+    <div class="row">
+        <div class="passCell" data-index="5"></div>
+        <div class="passCell" data-index="6"></div>
+        <div class="passCell" data-index="7"></div>
+        <div class="passCell" data-index="8"></div>
+    </div>
+
+</div>
+
+    <br>
+
+    <button id="checkPassword">
+        Comprobar
+    </button>
+
+    <p id="passwordMsg"></p>
+
+</div>
+
+<div id="game" class="hidden">
+
+    <h2>Encuentra la salida</h2>
+
+    <div id="message"></div>
+
+    <div id="thoughts"></div>
+
+    <div id="maze"></div>
+
+    <p>Usa WASD o las flechas del teclado</p>
+
+</div>
+
+<div id="final" class="hidden">
+
+    <h1>La salida siempre existió</h1>
+
+    <p style="max-width:800px;margin:auto;line-height:1.7">
+        Durante el recorrido parecía que no existía una salida. Sin embargo,
+        había caminos que podían conducir a apoyo, acompañamiento y ayuda.
+        El laberinto representa la incertidumbre que puede experimentar una
+        estudiante ante situaciones de hostigamiento.
+    </p>
+
+    <div class="map-container">
+
+        <div class="map-title">
+            Mapa de Red de Apoyo
+        </div>
+
+        <div class="network">
+
+            <div class="node center">
+                Estudiante
+            </div>
+
+            <div class="node">
+                Familia
+            </div>
+
+            <div class="node">
+                Amistades
+            </div>
+
+            <div class="node">
+                Tutor Académico
+            </div>
+
+            <div class="node">
+                Atención Psicológica
+            </div>
+
+            <div class="node">
+                Coordinación de Carrera
+            </div>
+
+            <div class="node">
+                Protocolos Institucionales
+            </div>
+
+            <div class="node">
+                Defensoría Universitaria
+            </div>
+
+        </div>
+
+    </div>
+
+    <div style="
+     margin-top:30px;
+     font-size:24px;
+     font-weight:bold;
+     color:#ffd166;
+     animation:pulse 2s infinite;
+     ">
+🔍 Revisa la parte de atrás de la computadora
+</div>
+
+
+</div>
+
+<script>
+    
+
+const levels = [
+
+[
+"############",
+"#P   #     #",
+"### ### ## #",
+"#     #    #",
+"# ### #### #",
+"# #        #",
+"# ####### ##",
+"#        E #",
+"############"
+],
+
+[
+"###############",
+"#P#       #   #",
+"# # ##### ### #",
+"# #   #       #",
+"# ### # ##### #",
+"#     # #   # #",
+"##### # # # # #",
+"#   # # # # # #",
+"# # ### # # # #",
+"# #     # #  E#",
+"###############"
+],
+
+[
+"###############",
+"#P            #",
+"# ##### ##### #",
+"# #         # #",
+"# # ##### # # #",
+"# # #   # # # #",
+"#   # # #   # #",
+"### # # ##### #",
+"#     #       #",
+"# ########### #",
+"#            E#",
+"###############"
+]
+
+];
+
+const messages = [
+
+"Quizá la salida esté cerca.",
+
+"Encontraste un camino, pero aún no termina.",
+
+"No sabes cuánto falta ni si realmente existe una salida."
+
+];
+
+const thoughts = [
+
+"¿Y si nadie me cree?",
+"Quizá estoy exagerando...",
+"No sé con quién hablar.",
+"Tal vez sea mi culpa.",
+"Mejor no digo nada.",
+"¿Y si empeora?",
+"Me siento sola.",
+"No encuentro una salida."
+
+];
+
+let currentLevel = 0;
+let playerX = 0;
+let playerY = 0;
+let mazeData = [];
+
+let fogRadius = 4;
+let startTime = 0;
+
+const maze = document.getElementById("maze");
+const thoughtsBox = document.getElementById("thoughts");
+
+document.getElementById("startBtn").addEventListener("click",()=>{
+
+    document.getElementById("menu").classList.add("hidden");
+
+    document.getElementById("passwordScreen").classList.remove("hidden");
+
+});
+
+
+function loadLevel(){
+
+    mazeData = levels[currentLevel].map(r=>r.split(""));
+
+    for(let y=0;y<mazeData.length;y++){
+
+        for(let x=0;x<mazeData[y].length;x++){
+
+            if(mazeData[y][x]==="P"){
+
+                playerX=x;
+                playerY=y;
+
+                mazeData[y][x]=" ";
+
+            }
+
+        }
+
+    }
+
+    startTime = Date.now();
+
+    if(currentLevel===0) fogRadius=4;
+    if(currentLevel===1) fogRadius=3;
+    if(currentLevel===2) fogRadius=2;
+
+    document.getElementById("message").textContent =
+    messages[currentLevel];
+
+    if(currentLevel===2){
+
+        for(let y=0;y<mazeData.length;y++){
+
+            for(let x=0;x<mazeData[y].length;x++){
+
+                if(mazeData[y][x]==="E"){
+
+                    mazeData[y][x]="H";
+
+                }
+
+            }
+
+        }
+
+        setTimeout(()=>{
+
+            for(let y=0;y<mazeData.length;y++){
+
+                for(let x=0;x<mazeData[y].length;x++){
+
+                    if(mazeData[y][x]==="H"){
+
+                        mazeData[y][x]="E";
+
+                    }
+
+                }
+
+            }
+
+            document.getElementById("message").textContent=
+            "Después de mucho tiempo aparece una posible salida.";
+
+            drawMaze();
+
+        },20000);
+
+    }
+
+    drawMaze();
+
+}
+
+function drawMaze(){
+
+    maze.innerHTML="";
+
+    maze.style.gridTemplateColumns=
+    `repeat(${mazeData[0].length},30px)`;
+
+    for(let y=0;y<mazeData.length;y++){
+
+        for(let x=0;x<mazeData[y].length;x++){
+
+            const cell=document.createElement("div");
+            cell.classList.add("cell");
+
+            const distance=
+            Math.abs(playerX-x)+
+            Math.abs(playerY-y);
+
+            if(distance>fogRadius){
+
+                cell.style.background="#000";
+
+                maze.appendChild(cell);
+
+                continue;
+
+            }
+
+            if(playerX===x && playerY===y){
+
+                cell.classList.add("player");
+
+            }
+            else if(mazeData[y][x]==="#"){
+
+                cell.classList.add("wall");
+
+            }
+            else if(mazeData[y][x]==="E"){
+
+                cell.classList.add("exit");
+
+            }
+            else{
+
+                cell.classList.add("path");
+
+            }
+
+            maze.appendChild(cell);
+
+        }
+
+    }
+
+}
+
+function move(dx,dy){
+
+    const nx=playerX+dx;
+    const ny=playerY+dy;
+
+    if(
+        ny<0 ||
+        ny>=mazeData.length ||
+        nx<0 ||
+        nx>=mazeData[0].length
+    ){
+        return;
+    }
+
+    const target=mazeData[ny][nx];
+
+    if(target==="#") return;
+
+    playerX=nx;
+    playerY=ny;
+
+    if(target==="E"){
+
+        currentLevel++;
+
+        if(currentLevel<levels.length){
+
+            loadLevel();
+
+        }else{
+
+            document.getElementById("game")
+            .classList.add("hidden");
+
+            document.getElementById("final")
+            .classList.remove("hidden");
+
+        }
+
+        return;
+    }
+
+    drawMaze();
+
+}
+
+document.addEventListener("keydown",(e)=>{
+
+    switch(e.key.toLowerCase()){
+
+        case "w":
+        case "arrowup":
+            move(0,-1);
+            break;
+
+        case "s":
+        case "arrowdown":
+            move(0,1);
+            break;
+
+        case "a":
+        case "arrowleft":
+            move(-1,0);
+            break;
+
+        case "d":
+        case "arrowright":
+            move(1,0);
+            break;
+
+    }
+
+});
+
+function updateFog(){
+
+    const elapsed =
+    (Date.now()-startTime)/1000;
+
+    if(currentLevel===0){
+
+        fogRadius=
+        Math.max(2,4-Math.floor(elapsed/15));
+
+    }
+    else if(currentLevel===1){
+
+        fogRadius=
+        Math.max(1,3-Math.floor(elapsed/12));
+
+    }
+    else{
+
+        fogRadius=
+        Math.max(1,2-Math.floor(elapsed/10));
+
+    }
+
+    drawMaze();
+
+}
+
+setInterval(updateFog,1000);
+
+function showThought(){
+
+    if(currentLevel!==2) return;
+
+    thoughtsBox.style.opacity="0";
+
+    setTimeout(()=>{
+
+        thoughtsBox.textContent =
+        thoughts[
+        Math.floor(
+        Math.random()*thoughts.length
+        )];
+
+        thoughtsBox.style.opacity="1";
+
+    },500);
+
+}
+
+setInterval(showThought,4000);
+
+const cells =
+document.querySelectorAll(".passCell");
+
+const symbols = ["", "👩", "👨"];
+
+let passwordState =
+["","","","","","","","",""];
+
+cells.forEach(cell=>{
+
+    cell.addEventListener("click",()=>{
+
+        const index =
+        Number(cell.dataset.index);
+
+        if(
+        cell.classList.contains("hiddenCell")
+        ) return;
+
+        let current =
+        symbols.indexOf(
+        passwordState[index]
+        );
+
+        current++;
+
+        if(current >= symbols.length){
+
+            current = 0;
+
+        }
+
+        passwordState[index] =
+        symbols[current];
+
+        cell.textContent =
+        passwordState[index];
+
+    });
+
+});
+
+const solution = [
+
+"👩","👨",
+"👩","👨","👨",
+"👩","👨","👨","👨"
+
+];
+
+document.getElementById("checkPassword").addEventListener("click",()=>{
+
+    let correct = true;
+
+    for(let i=0;i<solution.length;i++){
+
+        if(solution[i] !== passwordState[i]){
+
+            correct = false;
+            break;
+        }
+
+    }
+
+    if(correct){
+
+        document
+        .getElementById("passwordScreen")
+        .classList.add("hidden");
+
+        document
+        .getElementById("game")
+        .classList.remove("hidden");
+
+        loadLevel();
+
+    }else{
+
+        document
+        .getElementById("passwordMsg")
+        .textContent =
+        "La disposición no es correcta.";
+
+    }
+
+});
+
+</script>
+
+</body>
+</html>

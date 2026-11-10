@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Puzzle</title>
+
+<style>
+
+body{
+    font-family:Arial,sans-serif;
+    background:#eaf4ff;
+    text-align:center;
+    margin:20px;
+}
+
+.scene{
+    display:flex;
+    justify-content:center;
+    gap:40px;
+    flex-wrap:wrap;
+}
+
+.character{
+    width:320px;
+}
+
+.head{
+    width:70px;
+    height:70px;
+    border-radius:50%;
+    background:#555;
+    margin:auto;
+}
+
+.body{
+    width:40px;
+    height:90px;
+    background:#555;
+    margin:auto;
+    border-radius:10px;
+}
+
+.board{
+    display:grid;
+    grid-template-columns:repeat(2,120px);
+    grid-template-rows:repeat(2,60px);
+    gap:3px;
+    justify-content:center;
+    margin:10px auto;
+}
+
+.slot{
+    width:120px;
+    height:60px;
+    border:2px dashed #666;
+    background:#fff;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+#piecesPool{
+    display:grid;
+    grid-template-columns:repeat(4,120px);
+    gap:6px;
+    justify-content:center;
+    margin:30px auto;
+    min-height:220px;
+    padding:15px;
+    border:2px solid #ccc;
+    background:#fff;
+    width:max-content;
+    max-width:95%;
+}
+
+.piece{
+    width:120px;
+    height:60px;
+    cursor:grab;
+    border:1px solid #333;
+}
+
+.number{
+    display:none;
+    color:red;
+    font-size:42px;
+    font-weight:bold;
+    margin:10px;
+}
+
+#codigo{
+    display:none;
+    margin-top:30px;
+    font-size:50px;
+    color:green;
+    font-weight:bold;
+}
+
+</style>
+</head>
+<body>
+
+<div class="scene">
+
+<div class="character">
+
+<h3>💬</h3>
+
+<div class="board" id="board1"></div>
+
+<div id="num1" class="number">4</div>
+
+<div class="head"></div>
+<div class="body"></div>
+
+</div>
+
+<div class="character">
+
+<h3>💬</h3>
+
+<div class="board" id="board2"></div>
+
+<div id="num2" class="number">7</div>
+
+<div class="head"></div>
+<div class="body"></div>
+
+</div>
+
+<div class="character">
+
+<h3>💭</h3>
+
+<div class="board" id="board3"></div>
+
+<div id="num3" class="number">9</div>
+
+<div class="head"></div>
+<div class="body"></div>
+
+</div>
+
+</div>
+
+<div id="piecesPool"></div>
+
+<div id="codigo">
+🔓 479
+</div>
+
+<script>
+
+const puzzles = [
+{
+board:"board1",
+number:"num1",
+texto:[
+"Oye el otro día",
+"el profesor nuevo",
+"me compró un",
+"sándwich"
+]
+},
+{
+board:"board2",
+number:"num2",
+texto:[
+"En serio,",
+"se ve que",
+"es muy",
+"amigable"
+]
+},
+{
+board:"board3",
+number:"num3",
+texto:[
+"Se ve",
+"como una",
+"persona",
+"amable"
+]
+}
+];
+
+function shuffle(arr){
+
+let copia=[...arr];
+
+for(let i=copia.length-1;i>0;i--){
+
+const j=Math.floor(Math.random()*(i+1));
+
+[copia[i],copia[j]]=[copia[j],copia[i]];
+}
+
+return copia;
+}
+
+function crearPuzzle(puzzle,index){
+
+const board=document.getElementById(puzzle.board);
+
+const pool=document.getElementById("piecesPool");
+
+const piezas=[];
+
+for(let i=0;i<4;i++){
+
+const canvas=document.createElement("canvas");
+
+canvas.width=120;
+canvas.height=60;
+
+const ctx=canvas.getContext("2d");
+
+ctx.fillStyle="white";
+ctx.fillRect(0,0,120,60);
+
+ctx.strokeStyle="#333";
+ctx.lineWidth=2;
+ctx.strokeRect(0,0,120,60);
+
+ctx.fillStyle="#000";
+ctx.font="13px Arial";
+ctx.textAlign="center";
+
+ctx.fillText(puzzle.texto[i],60,35);
+
+piezas.push({
+id:i,
+src:canvas.toDataURL()
+});
+}
+
+for(let i=0;i<4;i++){
+
+const slot=document.createElement("div");
+
+slot.className="slot";
+
+slot.dataset.position=i;
+
+slot.addEventListener("dragover",e=>{
+e.preventDefault();
+});
+
+slot.addEventListener("drop",e=>{
+
+e.preventDefault();
+
+const data=JSON.parse(
+e.dataTransfer.getData("text")
+);
+
+const dragged=document.getElementById(data.id);
+
+const origen=dragged.parentElement;
+
+if(slot.children.length===0){
+
+slot.appendChild(dragged);
+
+}else{
+
+const piezaDestino=slot.children[0];
+
+origen.appendChild(piezaDestino);
+
+slot.appendChild(dragged);
+}
+
+revisarPuzzle(index,puzzle);
+
+});
+
+board.appendChild(slot);
+}
+
+shuffle(piezas).forEach(p=>{
+
+const img=document.createElement("img");
+
+img.src=p.src;
+
+img.className="piece";
+
+img.draggable=true;
+
+img.dataset.correct=p.id;
+
+img.dataset.puzzle=index;
+
+img.id=`pieza_${index}_${p.id}`;
+
+img.addEventListener("dragstart",e=>{
+
+e.dataTransfer.setData(
+"text",
+JSON.stringify({
+id:img.id
+})
+);
+
+});
+
+pool.appendChild(img);
+
+});
+
+}
+
+function revisarPuzzle(index,puzzle){
+
+const slots=document.querySelectorAll(
+"#"+puzzle.board+" .slot"
+);
+
+let correcto=true;
+
+slots.forEach((slot,pos)=>{
+
+if(slot.children.length===0){
+
+correcto=false;
+return;
+}
+
+const pieza=slot.children[0];
+
+if(Number(pieza.dataset.correct)!==pos){
+
+correcto=false;
+}
+
+});
+
+if(correcto){
+
+document.getElementById(
+puzzle.number
+).style.display="block";
+
+comprobarFinal();
+}
+}
+
+function comprobarFinal(){
+
+const completo=
+
+document.getElementById("num1").style.display==="block" &&
+document.getElementById("num2").style.display==="block" &&
+document.getElementById("num3").style.display==="block";
+
+if(completo){
+
+document.getElementById("codigo").style.display="block";
+}
+}
+
+const pool=document.getElementById("piecesPool");
+
+pool.addEventListener("dragover",e=>{
+e.preventDefault();
+});
+
+pool.addEventListener("drop",e=>{
+
+e.preventDefault();
+
+const data=JSON.parse(
+e.dataTransfer.getData("text")
+);
+
+const dragged=document.getElementById(data.id);
+
+pool.appendChild(dragged);
+
+});
+
+puzzles.forEach((p,i)=>{
+crearPuzzle(p,i);
+});
+
+</script>
+
+</body>
+</html>
