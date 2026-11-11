@@ -3,21 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Puzzle de Diálogos</title>
+<title>Acertijo de Diálogos</title>
 
 <style>
 
 body{
     margin:0;
-    background:#edf2f7;
+    background:#ececec;
     font-family:Arial,sans-serif;
     text-align:center;
 }
 
 #gameContainer{
-    position:relative;
     width:1200px;
     margin:20px auto;
+    position:relative;
 }
 
 #escena{
@@ -25,110 +25,142 @@ body{
     display:block;
 }
 
-/* POSICIÓN DE LOS 3 PUZZLES */
+/* GLOBOS */
+
+.board{
+    position:absolute;
+
+    display:grid;
+    grid-template-columns:repeat(2,160px);
+    grid-template-rows:repeat(2,70px);
+
+    gap:4px;
+}
 
 #board1{
-    position:absolute;
-    left:100px;
-    top:75px;
+    left:40px;
+    top:40px;
 }
 
 #board2{
-    position:absolute;
-    left:470px;
-    top:80px;
+    left:430px;
+    top:40px;
 }
 
 #board3{
-    position:absolute;
-    left:835px;
-    top:70px;
-}
-
-.board{
-    display:grid;
-    grid-template-columns:repeat(2,120px);
-    grid-template-rows:repeat(2,60px);
-    gap:2px;
+    left:800px;
+    top:40px;
 }
 
 .slot{
-    width:120px;
-    height:60px;
-    border:2px dashed rgba(255,255,255,.6);
-    background:rgba(255,255,255,.15);
+    width:160px;
+    height:70px;
+
+    border:2px dashed rgba(0,0,0,.4);
+
+    background:rgba(255,255,255,.4);
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    font-size:18px;
+    text-align:center;
 }
 
-.piece{
-    width:120px;
-    height:60px;
-    cursor:grab;
-    border-radius:6px;
-}
+/* PIEZAS */
 
 #piecesPool{
-    margin-top:25px;
 
-    display:grid;
-    grid-template-columns:repeat(6,120px);
+    margin-top:20px;
+
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+
     gap:10px;
 
-    justify-content:center;
+    background:white;
 
     padding:20px;
 
+    border-top:3px solid #ccc;
+}
+
+.piece{
+
+    width:160px;
+    height:70px;
+
     background:white;
-    border:2px solid #ccc;
+
+    border:2px solid #444;
+
+    border-radius:10px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    text-align:center;
+
+    padding:5px;
+
+    cursor:grab;
+
+    font-size:18px;
 }
 
 .number{
+
     display:none;
 
     position:absolute;
 
-    font-size:48px;
-    font-weight:bold;
+    color:green;
 
-    color:#00aa33;
+    font-size:60px;
+
+    font-weight:bold;
 }
 
-/* posición de números */
-
 #num1{
-    top:300px;
-    left:175px;
+    left:150px;
+    top:330px;
 }
 
 #num2{
-    top:300px;
-    left:550px;
+    left:540px;
+    top:330px;
 }
 
 #num3{
-    top:300px;
-    left:920px;
+    left:915px;
+    top:330px;
 }
 
 #codigo{
-    display:none;
-    margin-top:25px;
 
-    font-size:55px;
+    display:none;
+
+    margin-top:20px;
+
+    font-size:60px;
+
+    color:green;
+
     font-weight:bold;
-    color:#00aa33;
 }
 
 </style>
 </head>
-
 <body>
 
 <div id="gameContainer">
 
 <img
 id="escena"
-src="fondo-tres-hablando-globos-de-texto-gris.png"
->
+src="fondo-tres-hablando-globos-de-texto-gris.png">
 
 <div id="board1" class="board"></div>
 <div id="board2" class="board"></div>
@@ -153,19 +185,34 @@ const puzzles = [
 {
 board:"board1",
 number:"num1",
-image:"Asertijos scaperoom HTML/globo-3-whatsapp.png"
+pieces:[
+"¿No les parece raro",
+"que sea la única",
+"clase con grupo",
+"de WhatsApp?"
+]
 },
 
 {
 board:"board2",
 number:"num2",
-image:"globo-2-snadwich.png" 
+pieces:[
+"No lo sé, pero",
+"me regaló un sándwich.",
+"¡Qué buena",
+"onda!"
+]
 },
 
 {
 board:"board3",
 number:"num3",
-image:"Assets_scaperoom/Bocetos/puzzle1-dialogos/globo-3-preferencia-alumnas-pensamientos.png"
+pieces:[
+"Me dio la impresión",
+"de que tiene",
+"preferencia por",
+"las alumnas."
+]
 }
 
 ];
@@ -177,7 +224,6 @@ for(let i=array.length-1;i>0;i--){
 const j=Math.floor(Math.random()*(i+1));
 
 [array[i],array[j]]=[array[j],array[i]];
-
 }
 
 return array;
@@ -187,72 +233,31 @@ function crearPuzzle(puzzle,index){
 
 const board=document.getElementById(puzzle.board);
 
-const imagen=new Image();
-
-imagen.onload=function(){
-
-const piezas=[];
-
-const anchoPieza=120;
-const altoPieza=60;
-
-for(let i=0;i<4;i++){
-
-const fila=Math.floor(i/2);
-const columna=i%2;
-
-const canvas=document.createElement("canvas");
-
-canvas.width=anchoPieza;
-canvas.height=altoPieza;
-
-const ctx=canvas.getContext("2d");
-
-ctx.drawImage(
-imagen,
-columna*(imagen.width/2),
-fila*(imagen.height/2),
-imagen.width/2,
-imagen.height/2,
-0,
-0,
-anchoPieza,
-altoPieza
-);
-
-piezas.push({
-id:i,
-src:canvas.toDataURL()
-});
-
-}
-
 for(let i=0;i<4;i++){
 
 const slot=document.createElement("div");
 
 slot.className="slot";
+
 slot.dataset.position=i;
 
-slot.addEventListener("dragover",e=>{
+slot.addEventListener("dragover",(e)=>{
 e.preventDefault();
 });
 
-slot.addEventListener("drop",e=>{
+slot.addEventListener("drop",(e)=>{
 
 e.preventDefault();
 
-const data=JSON.parse(
-e.dataTransfer.getData("text")
-);
+const id=e.dataTransfer.getData("pieza");
 
-const dragged=document.getElementById(data.id);
+const pieza=document.getElementById(id);
 
-const origen=dragged.parentElement;
+const origen=pieza.parentElement;
 
 if(slot.children.length===0){
 
-slot.appendChild(dragged);
+slot.appendChild(pieza);
 
 }else{
 
@@ -260,53 +265,64 @@ const existente=slot.children[0];
 
 origen.appendChild(existente);
 
-slot.appendChild(dragged);
+slot.appendChild(pieza);
 
 }
 
-revisarPuzzle(index,puzzle);
+revisarPuzzle(puzzle);
 
 });
 
 board.appendChild(slot);
 }
 
-shuffle(piezas).forEach(pieza=>{
+let piezas=[];
 
-const img=document.createElement("img");
+for(let i=0;i<4;i++){
 
-img.src=pieza.src;
-img.className="piece";
-img.draggable=true;
+piezas.push({
 
-img.dataset.correct=pieza.id;
+correct:i,
+texto:puzzle.pieces[i]
 
-img.id=`pieza_${index}_${pieza.id}`;
+});
 
-img.addEventListener("dragstart",e=>{
+}
+
+shuffle(piezas);
+
+piezas.forEach((pieza)=>{
+
+const div=document.createElement("div");
+
+div.className="piece";
+
+div.draggable=true;
+
+div.id=`pieza_${index}_${pieza.correct}`;
+
+div.dataset.correct=pieza.correct;
+
+div.textContent=pieza.texto;
+
+div.addEventListener("dragstart",(e)=>{
 
 e.dataTransfer.setData(
-"text",
-JSON.stringify({
-id:img.id
-})
+"pieza",
+div.id
 );
 
 });
 
 document
 .getElementById("piecesPool")
-.appendChild(img);
+.appendChild(div);
 
 });
 
-};
-
-imagen.src=puzzle.image;
-
 }
 
-function revisarPuzzle(index,puzzle){
+function revisarPuzzle(puzzle){
 
 const slots=document.querySelectorAll(
 "#"+puzzle.board+" .slot"
@@ -333,28 +349,31 @@ correcto=false;
 
 if(correcto){
 
-document.getElementById(
-puzzle.number
-).style.display="block";
+document
+.getElementById(puzzle.number)
+.style.display="block";
 
 comprobarFinal();
+
 }
 
 }
 
 function comprobarFinal(){
 
-const terminado=
+if(
 
-document.getElementById("num1").style.display==="block" &&
-document.getElementById("num2").style.display==="block" &&
-document.getElementById("num3").style.display==="block";
+document.getElementById("num1").style.display==="block"
+&&
+document.getElementById("num2").style.display==="block"
+&&
+document.getElementById("num3").style.display==="block"
 
-if(terminado){
+){
 
-document.getElementById(
-"codigo"
-).style.display="block";
+document
+.getElementById("codigo")
+.style.display="block";
 
 }
 
@@ -362,26 +381,26 @@ document.getElementById(
 
 const pool=document.getElementById("piecesPool");
 
-pool.addEventListener("dragover",e=>{
+pool.addEventListener("dragover",(e)=>{
 e.preventDefault();
 });
 
-pool.addEventListener("drop",e=>{
+pool.addEventListener("drop",(e)=>{
 
 e.preventDefault();
 
-const data=JSON.parse(
-e.dataTransfer.getData("text")
-);
+const id=e.dataTransfer.getData("pieza");
 
-const dragged=document.getElementById(data.id);
+const pieza=document.getElementById(id);
 
-pool.appendChild(dragged);
+pool.appendChild(pieza);
 
 });
 
 puzzles.forEach((p,i)=>{
+
 crearPuzzle(p,i);
+
 });
 
 </script>
