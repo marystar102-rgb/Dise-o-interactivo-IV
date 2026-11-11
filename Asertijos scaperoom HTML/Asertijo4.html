@@ -54,10 +54,9 @@ button:hover{
 }
 
 .cell{
-    width:30px;
-    height:30px;
+    width:40px;
+    height:40px;
 }
-
 .wall{
     background:#29384a;
 }
@@ -282,8 +281,8 @@ button:hover{
     <h1>La salida siempre existió</h1>
 
     <p style="max-width:800px;margin:auto;line-height:1.7">
-        Durante el recorrido parecía que no existía una salida. Sin embargo,
-        había caminos que podían conducir a apoyo, acompañamiento y ayuda.
+        Durante el recorrido parecía que no existía una salida. 
+        Sin embargo, había caminos que podían conducir a apoyo, acompañamiento y ayuda.
         El laberinto representa la incertidumbre que puede experimentar una
         estudiante ante situaciones de hostigamiento.
     </p>
@@ -423,6 +422,7 @@ let mazeData = [];
 
 let fogRadius = 4;
 let startTime = 0;
+let playerMoving = false;
 
 const maze = document.getElementById("maze");
 const thoughtsBox = document.getElementById("thoughts");
@@ -541,9 +541,17 @@ function drawMaze(){
 
             if(playerX===x && playerY===y){
 
-                cell.classList.add("player");
+    const img = document.createElement("img");
 
-            }
+    img.src = getPlayerGif();
+
+    img.style.width = "100%";
+    img.style.height = "100%";
+    img.style.objectFit = "contain";
+
+    cell.appendChild(img);
+
+}
             else if(mazeData[y][x]==="#"){
 
                 cell.classList.add("wall");
@@ -586,6 +594,8 @@ function move(dx,dy){
 
     if(target==="#") return;
 
+    playerMoving = true;
+
     playerX=nx;
     playerY=ny;
 
@@ -611,6 +621,13 @@ function move(dx,dy){
     }
 
     drawMaze();
+    setTimeout(()=>{
+
+    playerMoving = false;
+
+    drawMaze();
+
+},150);
 
 }
 
@@ -781,6 +798,17 @@ document.getElementById("checkPassword").addEventListener("click",()=>{
 
 });
 
+function getPlayerGif(){
+
+    if(playerMoving){
+
+        return "../Assets_scaperoom/Bocetos/puzzle4-laberinto/caminata-prota-chiquita.gif";
+
+    }
+
+    return "../Assets_scaperoom/Bocetos/puzzle4-laberinto/idle-prota-chiquita.gif";
+
+}
 </script>
 
 </body>

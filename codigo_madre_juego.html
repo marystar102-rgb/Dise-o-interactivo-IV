@@ -196,13 +196,68 @@ body{
 
     cursor:pointer;
 }
+
+#intro{
+
+    position:fixed;
+
+    inset:0;
+
+    z-index:20000;
+
+    background:black;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    align-items:center;
+}
+
+#introImg{
+
+    width:100%;
+    height:100%;
+
+    object-fit:contain;
+}
+
+#siguiente{
+
+    position:absolute;
+
+    bottom:25px;
+
+    right:25px;
+
+    padding:12px 25px;
+
+    font-size:20px;
+
+    cursor:pointer;
+}
+
 </style>
 </head>
 
 <body>
 
-<!-- PROFESOR -->
+<div id="intro">
 
+    <img id="introImg"
+         src="Assets_scaperoom/Bocetos/cutscene/1-comic-inicio.png">
+
+    <button id="siguiente">
+        →
+    </button>
+
+</div>
+
+<div id="juego" style="display:none;">
+
+<!-- PROFESOR -->
 <div id="paredProfesor" class="pared">
 
     <img
@@ -280,6 +335,52 @@ body{
 <button id="der">▶</button>
 
 <script>
+
+const imagenesIntro = [
+
+    "Assets_scaperoom/Bocetos/cutscene/2-comic-inicio.png",
+    "Assets_scaperoom/Bocetos/cutscene/3-comic-inicio.png",
+    "Assets_scaperoom/Bocetos/cutscene/4-comic-inicio.png",
+    "Assets_scaperoom/Bocetos/cutscene/5-comic-inicio.png"
+];
+
+let paginaActual = 0;
+
+const intro =
+document.getElementById("intro");
+
+const introImg =
+document.getElementById("introImg");
+
+const botonSiguiente =
+document.getElementById("siguiente");
+
+botonSiguiente.addEventListener(
+"click",
+()=>{
+
+    paginaActual++;
+
+    if(
+       paginaActual <
+       imagenesIntro.length
+    ){
+
+        introImg.src =
+        imagenesIntro[paginaActual];
+
+    }else{
+
+    intro.style.display = "none";
+
+    document.getElementById("juego")
+    .style.display = "block";
+
+    mostrarPared();
+
+    }
+
+});
 
 /* PAREDES */
 
@@ -468,5 +569,6 @@ document
 
 </script>
 
+</div>
 </body>
 </html>
