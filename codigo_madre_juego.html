@@ -119,7 +119,7 @@ body{
 
     cursor:pointer;
 
-    z-index:9999;
+    z-index:30000;
 }
 
 #izq{
@@ -239,12 +239,391 @@ body{
     cursor:pointer;
 }
 
+#acertijo1{
+
+    display:none;
+
+    position:absolute;
+
+    top:0;
+    left:0;
+
+    width:100vw;
+    height:100vh;
+
+    background:white;
+
+    z-index:8000;
+}
+
+#volverAcertijo1{
+
+    position:absolute;
+
+    top:20px;
+    left:20px;
+
+    z-index:9000;
+
+    padding:10px 20px;
+
+    cursor:pointer;
+}
+
+#gameContainer{
+    width:1300px;
+    margin:10px auto;
+    position:relative;
+}
+
+#escena{
+    width:100%;
+    display:block;
+}
+
+/* GLOBOS */
+
+.board{
+    position:absolute;
+    display:grid;
+    grid-template-columns:repeat(2, 110px);
+    grid-template-rows:repeat(2, 70px);
+    gap:4px;
+}
+
+/* Ajusta si lo necesitas */
+
+#board1{
+    left:150px;
+    top:100px;
+}
+
+#board2{
+    left:560px;
+    top:120px;
+}
+
+#board3{
+    left:970px;
+    top:130px;
+}
+
+.slot{
+    width:110px;
+    height:70px;
+
+    background:transparent;
+
+    border:none;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    text-align:center;
+
+    font-size:18px;
+}
+
+/* PIEZAS */
+
+#piecesPool{
+
+    margin-top:20px;
+
+    display:flex;
+    flex-wrap:wrap;
+
+    justify-content:center;
+
+    gap:10px;
+
+    padding:20px;
+
+    background:white;
+
+    border-top:3px solid #ccc;
+}
+
+.piece{
+
+    width:110px;
+    min-height:70x;
+
+    background:transparent;
+
+    border:none;
+
+    border-radius:0;
+
+    display:flex;
+
+    justify-content:center;
+    align-items:center;
+
+    text-align:center;
+
+    padding:5px;
+
+    cursor:grab;
+
+    box-sizing:border-box;
+
+    font-size:18px;
+}
+
+/* NUMEROS */
+
+.number{
+
+    display:none;
+
+    position:absolute;
+
+    font-size:60px;
+    font-weight:bold;
+
+    color:green;
+}
+
+#num1{
+    left:180px;
+    top:340px;
+}
+
+#num2{
+    left:560px;
+    top:340px;
+}
+
+#num3{
+    left:930px;
+    top:340px;
+}
+
+#codigo{
+
+    display:none;
+
+    position:fixed;
+
+    left:50%;
+    top:90%;
+
+    transform:translate(-50%, -50%);
+
+    font-size:60px;
+    font-weight:bold;
+
+    color:green;
+
+    background:white;
+
+    padding:20px 40px;
+
+    border:3px solid green;
+
+    border-radius:15px;
+
+    z-index:10000;
+}
+
+.pista{
+
+    position:absolute;
+
+    width:260px;
+
+    text-align:center;
+
+    font-family:"Trebuchet MS", sans-serif;
+
+    font-size:22px;
+
+    font-weight:bold;
+
+    color:#222;
+
+}
+
+#pista1{
+    left:100px;
+    top:680px;
+    width:400px;
+
+    padding-left:20px;
+    padding-right:20px;
+
+    box-sizing:border-box;
+}
+
+#pista2{
+    left:550px;
+    top:680px;
+}
+
+#pista3{
+    left:900px;
+    top:680px;
+}
+
+#inventario{
+
+    position:fixed;
+
+    bottom:0;
+    left:0;
+
+    width:100%;
+
+    height:90px;
+
+    background:rgba(0,0,0,.9);
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:15px;
+
+    z-index:15000;
+
+    transition:.3s;
+}
+
+.slotInventario{
+
+    width:70px;
+    height:70px;
+
+    border:2px solid white;
+
+    background:#333;
+}
+
+#tituloInventario{
+
+    text-align:center;
+
+    color:white;
+
+    font-size:20px;
+
+    font-weight:bold;
+
+    margin-bottom:10px;
+
+    letter-spacing:2px;
+}
+
+#contenedorInventario{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:15px;
+}
+
+#btnInventario{
+
+    position:fixed;
+
+    bottom:20px;
+
+    right:20px;
+
+    width:50px;
+    height:50px;
+
+    font-size:28px;
+
+    font-weight:bold;
+
+    z-index:30001;
+
+    cursor:pointer;
+}
+
+#menuInicio{
+
+    position:fixed;
+
+    inset:0;
+
+    background:black;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:20px;
+
+    z-index:50000;
+}
+
+#menuInicio h1{
+
+    color:white;
+
+    font-size:60px;
+}
+
+#menuInicio button{
+
+    width:220px;
+
+    padding:15px;
+
+    font-size:24px;
+
+    cursor:pointer;
+}
+
+#fade{
+
+    position:fixed;
+
+    inset:0;
+
+    background:black;
+
+    opacity:0;
+
+    pointer-events:none;
+
+    transition:opacity 2s ease;
+
+    z-index:49000;
+}
+
+
 </style>
 </head>
 
 <body>
 
-<div id="intro">
+<div id="menuInicio">
+
+    <h1>ESCAPE ROOM</h1>
+
+    <button id="btnJugar">
+        Jugar
+    </button>
+
+</div>
+
+<div id="fade"></div>
+
+<div id="intro" style="display:none;">
 
     <img id="introImg"
          src="Assets_scaperoom/Bocetos/cutscene/1-comic-inicio.png">
@@ -310,18 +689,53 @@ body{
 
 <!-- ESCRITORIO -->
 
-<div id="vistaEscritorio">
+<div id="acertijo1">
 
-    <button id="volver">← Volver</button>
+    <button id="volverAcertijo1">
+        ←
+    </button>
 
-    <img src="escritorio_puzzle.png">
+    <div id="gameContainer">
+
+<img
+id="escena"
+src="Assets_scaperoom/Bocetos/puzzle1-dialogos/fondo-tres-hablando-globos-de-texto-gris.png"
+alt="Fondo">
+
+<div id="board1" class="board"></div>
+<div id="board2" class="board"></div>
+<div id="board3" class="board"></div>
+
+<div id="num1" class="number">4</div>
+<div id="num2" class="number">7</div>
+<div id="num3" class="number">9</div>
+
+<div id="pista1" class="pista">
+    Comunicación por medios no institucionales
+</div>
+
+<div id="pista2" class="pista">
+    Ganarse la confianza del alumnado
+</div>
+
+<div id="pista3" class="pista">
+    Preferencia por ciertos alumnos
+</div>
+
+</div>
+
+<div id="piecesPool"></div>
+
+<div id="codigo">
+🔓 CÓDIGO: 479
+</div>
 
 </div>
 
 <div id="vistaCasilleros">
 
     <button id="volverCasilleros">
-        ← Volver
+        ← 
     </button>
 
     <img
@@ -334,7 +748,113 @@ body{
 <button id="izq">◀</button>
 <button id="der">▶</button>
 
+<button id="btnInventario">▼</button>
+
+<div id="inventario">
+
+    <div id="tituloInventario">
+        INVENTARIO
+    </div>
+
+    <div id="contenedorInventario">
+
+        <div class="slotInventario"></div>
+        <div class="slotInventario"></div>
+        <div class="slotInventario"></div>
+        <div class="slotInventario"></div>
+        <div class="slotInventario"></div>
+        <div class="slotInventario"></div>
+
+    </div>
+
+</div>
+
 <script>
+
+let estado = {
+
+    acertijo1:false,
+
+    llave:false,
+
+    telefono:false,
+
+    codigo479:false
+
+};
+
+let inventario = [];
+
+const menuInicio =
+document.getElementById("menuInicio");
+
+const fade =
+document.getElementById("fade");
+
+const introPantalla =
+document.getElementById("intro");
+
+document
+.getElementById("btnJugar")
+.addEventListener("click",()=>{
+
+    fade.style.opacity = "1";
+
+    setTimeout(()=>{
+
+        menuInicio.style.display =
+        "none";
+
+        introPantalla.style.display =
+        "flex";
+
+        fade.style.opacity = "0";
+
+    },800);
+
+});
+
+let inventarioVisible = true;
+
+function agregarInventario(imagen){
+
+    inventario.push(imagen);
+
+    actualizarInventario();
+
+}
+
+function actualizarInventario(){
+
+    const slots =
+    document.querySelectorAll(
+        ".slotInventario"
+    );
+
+    slots.forEach(slot=>{
+
+        slot.innerHTML = "";
+
+    });
+
+    inventario.forEach((item,index)=>{
+
+        if(index < slots.length){
+
+            slots[index].innerHTML =
+
+            `<img src="${item}"
+            style="
+            width:100%;
+            height:100%;
+            object-fit:contain;
+            ">`;
+
+        }
+
+    });
+
+}
 
 const imagenesIntro = [
 
@@ -500,7 +1020,7 @@ hitboxCasilleros.addEventListener(
 
 hitbox.addEventListener("click",()=>{
 
-    document.getElementById("vistaEscritorio")
+    document.getElementById("acertijo1")
     .style.display="block";
 
     paredes[paredActual].style.display="none";
@@ -531,25 +1051,6 @@ hitboxCasilleros.addEventListener(
 
 });
 
-/* VOLVER */
-
-document
-.getElementById("volver")
-.addEventListener("click",()=>{
-
-    document.getElementById("vistaEscritorio")
-    .style.display="none";
-
-    mostrarPared();
-
-    document.getElementById("izq")
-    .style.display="block";
-
-    document.getElementById("der")
-    .style.display="block";
-
-});
-
 document
 .getElementById("volverCasilleros")
 .addEventListener("click",()=>{
@@ -564,6 +1065,282 @@ document
 
     document.getElementById("der")
     .style.display="block";
+
+});
+
+document
+.getElementById("volverAcertijo1")
+.addEventListener("click",()=>{
+
+    document.getElementById("acertijo1")
+    .style.display="none";
+
+    mostrarPared();
+
+    document.getElementById("izq")
+    .style.display="block";
+
+    document.getElementById("der")
+    .style.display="block";
+
+});
+
+const puzzles = [
+
+{
+board:"board1",
+number:"num1",
+frases:[
+"¿No les parece raro",
+"que sea la única",
+"clase con grupo",
+"de WhatsApp?"
+]
+},
+
+{
+board:"board2",
+number:"num2",
+frases:[
+"No lo sé, pero",
+"me regaló un sándwich.",
+"¡Qué buena",
+"onda!"
+]
+},
+
+{
+board:"board3",
+number:"num3",
+frases:[
+"Me dio la impresión",
+"de que tiene",
+"preferencia por",
+"las alumnas."
+]
+}
+
+];
+
+function mezclar(array){
+
+for(let i=array.length-1;i>0;i--){
+
+let j=Math.floor(Math.random()*(i+1));
+
+[array[i],array[j]]=[array[j],array[i]];
+}
+
+return array;
+}
+
+function crearPuzzle(puzzle,index){
+
+const board=document.getElementById(puzzle.board);
+
+for(let i=0;i<4;i++){
+
+const slot=document.createElement("div");
+
+slot.className="slot";
+
+slot.dataset.position=i;
+
+slot.addEventListener("dragover",e=>{
+e.preventDefault();
+});
+
+slot.addEventListener("drop",e=>{
+
+e.preventDefault();
+
+const id=e.dataTransfer.getData("pieza");
+
+const pieza=document.getElementById(id);
+
+const origen=pieza.parentElement;
+
+if(slot.children.length===0){
+
+slot.appendChild(pieza);
+
+}else{
+
+const existente=slot.children[0];
+
+origen.appendChild(existente);
+
+slot.appendChild(pieza);
+
+}
+
+revisarPuzzle(puzzle);
+
+});
+
+board.appendChild(slot);
+}
+
+let piezas=[];
+
+for(let i=0;i<4;i++){
+
+piezas.push({
+texto:puzzle.frases[i],
+correcta:i
+});
+
+}
+
+mezclar(piezas);
+
+piezas.forEach(pieza=>{
+
+const div=document.createElement("div");
+
+div.className="piece";
+
+div.textContent=pieza.texto;
+
+div.draggable=true;
+
+div.dataset.correct=pieza.correcta;
+
+div.id="pieza_"+index+"_"+pieza.correcta;
+
+div.addEventListener("dragstart",e=>{
+
+e.dataTransfer.setData(
+"pieza",
+div.id
+);
+
+});
+
+document
+.getElementById("piecesPool")
+.appendChild(div);
+
+});
+
+}
+
+function revisarPuzzle(puzzle){
+
+const slots=document.querySelectorAll(
+"#"+puzzle.board+" .slot"
+);
+
+let correcto=true;
+
+slots.forEach((slot,pos)=>{
+
+if(slot.children.length===0){
+
+correcto=false;
+return;
+}
+
+const pieza=slot.children[0];
+
+if(Number(pieza.dataset.correct)!==pos){
+
+correcto=false;
+}
+
+});
+
+if(correcto){
+
+document.getElementById(
+puzzle.number
+).style.display="block";
+
+comprobarFinal();
+}
+
+}
+
+function comprobarFinal(){
+
+const completo =
+
+document.getElementById("num1").style.display==="block"
+&&
+document.getElementById("num2").style.display==="block"
+&&
+document.getElementById("num3").style.display==="block";
+
+if(completo){
+
+document.getElementById("codigo")
+.style.display="block";
+
+}
+
+}
+
+const pool=document.getElementById("piecesPool");
+
+pool.addEventListener("dragover",e=>{
+e.preventDefault();
+});
+
+pool.addEventListener("drop",e=>{
+
+e.preventDefault();
+
+const id=e.dataTransfer.getData("pieza");
+
+const pieza=document.getElementById(id);
+
+pool.appendChild(pieza);
+
+});
+
+puzzles.forEach((p,i)=>{
+
+crearPuzzle(p,i);
+
+});
+
+document
+.getElementById("btnInventario")
+.addEventListener("click",()=>{
+
+    const inv =
+    document.getElementById("inventario");
+
+    if(inventarioVisible){
+
+        inv.style.bottom = "-120px";
+
+        document
+        .getElementById("btnInventario")
+        .textContent = "▲";
+
+        inventarioVisible = false;
+
+    }else{
+
+        inv.style.bottom = "0";
+
+        document
+        .getElementById("btnInventario")
+        .textContent = "▼";
+
+        inventarioVisible = true;
+
+    }
+
+});
+
+document
+.getElementById("btnSalir")
+.addEventListener("click",()=>{
+
+    window.location.href =
+    "about:blank";
 
 });
 
