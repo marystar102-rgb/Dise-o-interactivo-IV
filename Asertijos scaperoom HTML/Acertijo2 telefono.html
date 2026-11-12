@@ -14,30 +14,31 @@ font-family:Arial, sans-serif;
 }
 
 body{
-background:#1f1f1f;
+background:transparent;
 display:flex;
 justify-content:center;
 align-items:center;
 height:100vh;
+margin:0;
 }
 
 .phone{
 width:360px;
 height:700px;
-background:#111;
-border:12px solid #000;
-border-radius:40px;
-padding:15px;
-box-shadow:0 0 30px rgba(0,0,0,.4);
+background:none;
+border:none;
+border-radius:0;
+padding:0;
+box-shadow:none;
 }
 
 .screen{
 width:100%;
 height:100%;
 overflow:hidden;
-border-radius:25px;
 position:relative;
-background:white;
+background:transparent;
+border-radius:0;
 }
 
 .hidden{
@@ -71,7 +72,7 @@ border-radius:8px;
 #unlockBtn{
 position:absolute;
 
-top:520px;
+top:370px;
 left:110px;
 
 width:120px;
@@ -89,8 +90,8 @@ font-weight:bold;
 #pin{
 position:absolute;
 
-top:420px;
-left:90px;
+top:280px;
+left:110px;
 
 width:140px;
 height:40px;
@@ -106,11 +107,6 @@ color:black;
 }
 
 /* HOME */
-
-#homeScreen{
-height:100%;
-background:linear-gradient(#9cd0ff,#dcefff);
-}
 
 .homeHeader{
 padding:15px;
@@ -259,8 +255,9 @@ bottom:0;
 display:flex;
 justify-content:center;
 align-items:center;
-background:rgba(0,0,0,.5);
+background:transparent;
 }
+
 
 .popupContent{
 background:white;
@@ -276,6 +273,70 @@ margin-top:10px;
 padding:8px 16px;
 }
 
+#homeScreen{
+position:relative;
+width:100%;
+height:100%;
+background:transparent;
+}
+
+#homeImage{
+width:100%;
+height:100%;
+object-fit:cover;
+display:block;
+}
+
+#teamsBtn{
+position:absolute;
+
+/* AJUSTAR */
+top:150px;
+left:70px;
+
+width:80px;
+height:80px;
+
+background:transparent;
+border:none;
+cursor:pointer;
+}
+
+#whatsappBtn{
+position:absolute;
+
+/* AJUSTAR */
+top:150px;
+left:190px;
+
+width:80px;
+height:80px;
+
+background:transparent;
+border:none;
+cursor:pointer;
+}
+
+#popupImage{
+width:100%;
+height:100%;
+object-fit:cover;
+}
+
+#popupOkBtn{
+position:absolute;
+
+/* AJUSTAR */
+top:320px;
+left:120px;
+
+width:120px;
+height:40px;
+
+background:transparent;
+border:none;
+cursor:pointer;
+}
 
 </style>
 </head>
@@ -303,23 +364,14 @@ padding:8px 16px;
 
 <div id="homeScreen" class="hidden">
 
-<div class="homeHeader">
-Pantalla de inicio
-</div>
+<img
+    id="homeImage"
+    src="../Assets_scaperoom/Bocetos/puzzle2-chat/celular-pantalla-inicio.png"
+    alt="Inicio">
 
-<div class="icons">
+<button id="teamsBtn"></button>
 
-<div class="icon" onclick="openTeams()">
-<div class="iconCircle team">T</div>
-<div>Teamsss</div>
-</div>
-
-<div class="icon" onclick="openWhats()">
-<div class="iconCircle wa">💬</div>
-<div>Wassap</div>
-</div>
-
-</div>
+<button id="whatsappBtn"></button>
 
 </div>
 
@@ -333,10 +385,6 @@ Pantalla de inicio
 
 <div class="chat">
 
-<div class="msg student">
-Hola profesor, le envío la actividad 😊
-</div>
-
 <div class="msg prof">
 Gracias por enviarla. La revisaré durante la tarde 👍
 </div>
@@ -345,10 +393,6 @@ Gracias por enviarla. La revisaré durante la tarde 👍
 <span class="phrase redflag">
 No le digas a los demás, pero eres mi alumna favorita 😉
 </span>
-</div>
-
-<div class="msg student">
-Muchas gracias profesor 😅
 </div>
 
 <div class="msg prof">
@@ -377,17 +421,15 @@ Comprobar red flags
 
 <!-- POPUP -->
 
-<div id="popup" class="popup hidden">
-<div class="popupContent">
-<h3>Teamsss</h3>
-<p>⚠️ La aplicación está en mantenimiento.</p>
-<button onclick="closePopup()">
-Aceptar
-</button>
-</div>
-</div>
+<<div id="popup" class="popup hidden">
 
-</div>
+<img
+    id="popupImage"
+    src="../Assets_scaperoom/Bocetos/puzzle2-chat/celular-pantalla-inicio-teams-pop-up-.png"
+    alt="Popup">
+
+<button id="popupOkBtn"></button>
+
 </div>
 
 <script>
@@ -398,10 +440,13 @@ document.getElementById("unlockBtn").addEventListener("click",()=>{
 
 const pin = document.getElementById("pin").value;
 
+// cambia visualmente al pulsar
 document.getElementById("lockImage").src =
 "../Assets_scaperoom/Bocetos/puzzle2-chat/celular-pantalla-bloqueada-hover.png";
 
-if(pin===correctPin){
+setTimeout(()=>{
+
+if(pin === correctPin){
 
 document.getElementById("lockScreen").classList.add("hidden");
 document.getElementById("homeScreen").classList.remove("hidden");
@@ -409,18 +454,13 @@ document.getElementById("homeScreen").classList.remove("hidden");
 }else{
 
 document.getElementById("lockImage").src =
-"../Assets_scaperoom/Bocetos/puzzle2-chat/celular-pantalla-bloqueada-hover.png";
+"../Assets_scaperoom/Bocetos/puzzle2-chat/celular-pantalla-bloqueada-contrasna-incorresta.png";
 
 }
+
+},150);
 
 });
-
-function openTeams(){
-
-document.getElementById("popup")
-.classList.remove("hidden");
-
-}
 
 function closePopup(){
 
@@ -554,6 +594,55 @@ document.getElementById("checkBtn").style.opacity="0.6";
 
 });
 
+document
+.getElementById("teamsBtn")
+.addEventListener("click",()=>{
+
+document.getElementById("homeImage").src =
+"../Assets_scaperoom/Bocetos/puzzle2-chat/celular-pantalla-inicio-teams-hover.png";
+
+setTimeout(()=>{
+
+document.getElementById("popup")
+.classList.remove("hidden");
+
+},120);
+
+});
+
+document
+.getElementById("whatsappBtn")
+.addEventListener("click",()=>{
+
+document.getElementById("homeImage").src =
+"../Assets_scaperoom/Bocetos/puzzle2-chat/celular-pantalla-inicio-whasap-hover.png";
+
+setTimeout(()=>{
+
+openWhats();
+
+},120);
+
+});
+
+document
+.getElementById("popupOkBtn")
+.addEventListener("click",()=>{
+
+document.getElementById("popupImage").src =
+"../Assets_scaperoom/Bocetos/puzzle2-chat/celular-pantalla-inicio-teams-pop-up-hover.png";
+
+setTimeout(()=>{
+
+document.getElementById("popup")
+.classList.add("hidden");
+
+document.getElementById("homeImage").src =
+"../Assets_scaperoom/Bocetos/puzzle2-chat/celular-pantalla-inicio.png";
+
+},120);
+
+});
 </script>
 
 </body>

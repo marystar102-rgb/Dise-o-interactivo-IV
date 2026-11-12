@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Detecta las Red Flags</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial, sans-serif;
+}
+
+body{
+background:transparent;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+margin:0;
+}
+
+.phone{
+width:360px;
+height:700px;
+background:none;
+border:none;
+border-radius:0;
+padding:0;
+box-shadow:none;
+}
+
+.screen{
+width:100%;
+height:100%;
+overflow:hidden;
+position:relative;
+background:transparent;
+border-radius:0;
+}
+
+.hidden{
+display:none !important;
+}
+
+/* BLOQUEO */
+
+#lockScreen{
+height:100%;
+position:relative;
+overflow:hidden;
+}
+
+#lockImage{
+width:100%;
+height:100%;
+object-fit:cover;
+display:block;
+}
+
+#pin{
+width:120px;
+padding:10px;
+font-size:24px;
+text-align:center;
+border:none;
+border-radius:8px;
+}
+
+#unlockBtn{
+position:absolute;
+
+top:370px;
+left:110px;
+
+width:120px;
+height:45px;
+
+background:transparent;
+border:none;
+cursor:pointer;
+}
+
+#pinMsg{
+font-weight:bold;
+}
+
+#pin{
+position:absolute;
+
+top:280px;
+left:110px;
+
+width:140px;
+height:40px;
+
+font-size:24px;
+text-align:center;
+
+background:transparent;
+border:none;
+outline:none;
+
+color:black;
+}
+
+/* HOME */
+
+.homeHeader{
+padding:15px;
+text-align:center;
+font-weight:bold;
+font-size:18px;
+}
+
+.icons{
+display:flex;
+gap:30px;
+justify-content:center;
+margin-top:70px;
+}
+
+.icon{
+text-align:center;
+cursor:pointer;
+}
+
+.iconCircle{
+width:70px;
+height:70px;
+border-radius:18px;
+display:flex;
+justify-content:center;
+align-items:center;
+margin:auto;
+margin-bottom:8px;
+color:white;
+font-size:28px;
+}
+
+.team{
+background:#635bff;
+}
+
+.wa{
+background:#25D366;
+}
+
+/* CHAT */
+
+.topbar{
+background:#128C7E;
+color:white;
+padding:15px;
+font-weight:bold;
+}
+
+.chat{
+height:520px;
+overflow-y:auto;
+background:#ece5dd;
+padding:12px;
+color:black;
+}
+
+.msg{
+max-width:85%;
+margin-bottom:12px;
+padding:10px;
+border-radius:12px;
+}
+
+.student{
+background:white;
+}
+
+.prof{
+background:#d8fdd2;
+margin-left:auto;
+}
+
+.phrase{
+cursor:pointer;
+padding:2px 4px;
+border-radius:4px;
+transition:.2s;
+}
+
+.phrase:hover{
+background:#fff2a6;
+}
+
+.phrase.selected{
+background:#ffe28a;
+text-decoration:underline;
+font-weight:bold;
+}
+
+.phrase.reveal{
+background:#ffb3b3;
+text-decoration:underline;
+font-weight:bold;
+}
+
+.footer{
+background:white;
+padding:10px;
+border-top:1px solid #ccc;
+}
+
+#result{
+margin-top:10px;
+color:black;
+}
+
+.explanation{
+background:#fff3cd;
+padding:10px;
+border-radius:8px;
+font-size:14px;
+line-height:1.4;
+max-height:250px;
+overflow-y:auto;
+}
+
+.systemMessage{
+background:white;
+padding:10px;
+border-radius:12px;
+margin-top:15px;
+border-left:4px solid #128C7E;
+color:black;
+}
+/* POPUP */
+
+.popup{
+position:absolute;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:transparent;
+z-index:5000;
+}
+
+
+.popupContent{
+background:white;
+padding:20px;
+border-radius:12px;
+width:80%;
+text-align:center;
+color:black;
+}
+
+.popupContent button{
+margin-top:10px;
+padding:8px 16px;
+}
+
+#homeScreen{
+position:relative;
+width:100%;
+height:100%;
+background:transparent;
+}
+
+#homeImage{
+width:100%;
+height:100%;
+object-fit:cover;
+display:block;
+}
+
+#teamsBtn{
+position:absolute;
+
+/* AJUSTAR */
+top:140px;
+left:70px;
+
+width:80px;
+height:80px;
+
+background:transparent;
+border:none;
+cursor:pointer;
+}
+
+#whatsappBtn{
+position:absolute;
+
+/* AJUSTAR */
+top:140px;
+left:160px;
+
+width:80px;
+height:80px;
+
+background:transparent;
+border:none;
+cursor:pointer;
+}
+
+
+#popupImage{
+position:absolute;
+top:0;
+left:0;
+width:100%;
+height:100%;
+object-fit:cover;
+pointer-events:none;
+}
+
+#popupOkBtn{
+position:absolute;
+top:340px;
+left:130px;
+width:90px;
+height:40px;
+
+background:transparent;
+opacity:.5;
+
+border:none;
+cursor:pointer;
+
+z-index:9999;
+}
+
+
+#feedback{
+position:absolute;
+top:0;
+left:0;
+width:100%;
+height:100%;
+}
+
+#feedbackImage{
+width:100%;
+height:100%;
+object-fit:cover;
+}
+
+#feedbackText{
+position:absolute;
+
+top:180px;
+left:65px;
+
+width:231px;
+height:400px;
+
+overflow-y:hidden;
+
+text-align:left;
+
+font-size:13px;
+line-height:1.4;
+
+color:black;
+font-weight:normal;
+}
+
+.frase1{
+position:absolute;
+top:270px;
+left:80px;
+width:220px;
+color:black;
+
+font-size: 15px;
+
+}
+
+.frase2{
+position:absolute;
+top:405px;
+left:80px;
+width:220px;
+color:black;
+
+font-size: 14px;
+}
+
+.frase3{
+position:absolute;
+top:490px;
+left:78px;
+width:220px;
+color:black;
+
+font-size: 13.5px;
+}
+
+#whatsapp{
+position:relative;
+width:100%;
+height:100%;
+}
+
+#chatImage{
+width:100%;
+height:100%;
+object-fit:cover;
+display:block;
+}
+
+#checkBtn{
+position:absolute;
+
+top:630px;
+left:60px;
+
+width:240px;
+height:55px;
+
+background:transparent;
+opacity:0.5;
+
+border:none;
+cursor:pointer;
+
+z-index:1000;
+}
+
+.mensajeNormal{
+position:absolute;
+top:180px;
+left:90px;
+width:220px;
+color:black;
+
+font-size: 15px;
+}
+
+#errorRedFlags{
+position:absolute;
+
+top:20px;
+left:50%;
+
+transform:translateX(-50%);
+
+background:#fff3cd;
+color:#000;
+
+padding:10px 15px;
+
+border-radius:10px;
+
+font-size:14px;
+font-weight:bold;
+
+z-index:99999;
+}
+
+</style>
+</head>
+<body>
+
+<div id="errorRedFlags" class="hidden">
+⚠️ Detectaste menos del 50% de las red flags. Inténtalo nuevamente.
+</div>
+
+<div class="phone">
+<div class="screen">
+
+    
+<!-- BLOQUEO -->
+
+<div id="lockScreen">
+
+    <img
+        id="lockImage"
+        src="../Assets_scaperoom/Bocetos/puzzle2-chat/celular-pantalla-bloqueada-hover.png"
+        alt="Bloqueo">
+
+    <input id="pin" maxlength="3">
+
+    <button id="unlockBtn"></button>
+
+</div>
+
+<!-- HOME -->
+
+<div id="homeScreen" class="hidden">
+
+<img
+    id="homeImage"
+    src="../Assets_scaperoom/Bocetos/puzzle2-chat/celular-pantalla-inicio.png"
+    alt="Inicio">
+
+<button id="teamsBtn"></button>
+
+<button id="whatsappBtn"></button>
+
+</div>
+
+<!-- WHATSAPP -->
+
+<div id="whatsapp" class="hidden">
+
+<img
+    id="chatImage"
+    src="../Assets_scaperoom/Bocetos/puzzle2-chat/celular-pantalla-chat.png"
+    alt="Chat">
+
+<div class="mensajeNormal frase4">
+Gracias por enviarme la actividad.
+</div>
+
+<div class="phrase redflag frase1">
+Si quieres te ayudo con tus tareas por mensaje en la noche, a esa hora podemos hablar más tranquilos 🌙
+</div>
+
+<div class="phrase redflag frase2">
+No le digas a los demás, pero eres mi alumna favorita 😉
+</div>
+
+<div class="phrase redflag frase3">
+Además, prefiero que nuestras conversaciones sean por privado 🙂
+</div>
+
+<button id="checkBtn"></button>
+
+<div id="feedback" class="hidden">
+
+    <img
+        id="feedbackImage"
+        src="../Assets_scaperoom/Bocetos/puzzle2-chat/celular-pantalla-chat-vacio.png"
+        alt="Corrección">
+
+    <div id="feedbackText"></div>
+
+</div>
+
+</div>
+
+<!-- POPUP -->
+
+<div id="popup" class="popup hidden">
+
+<img
+    id="popupImage"
+    src="../Assets_scaperoom/Bocetos/puzzle2-chat/celular-pantalla-inicio-teams-pop-up-.png"
+    alt="Popup">
+
+<button id="popupOkBtn"></button>
+
+</div>
+
+</div>
+
+
+<script>
+
+const correctPin = "479";
+
+document.getElementById("unlockBtn").addEventListener("click",()=>{
+
+const pin = document.getElementById("pin").value;
+
+// cambia visualmente al pulsar
+document.getElementById("lockImage").src =
+"../Assets_scaperoom/Bocetos/puzzle2-chat/celular-pantalla-bloqueada-hover.png";
+
+setTimeout(()=>{
+
+if(pin === correctPin){
+
+document.getElementById("lockScreen").classList.add("hidden");
+document.getElementById("homeScreen").classList.remove("hidden");
+
+}else{
+
+document.getElementById("lockImage").src =
+"../Assets_scaperoom/Bocetos/puzzle2-chat/celular-pantalla-bloqueada-contrasna-incorresta.png";
+
+}
+
+},150);
+
+});
+
+function closePopup(){
+
+document.getElementById("popup")
+.classList.add("hidden");
+
+}
+
+function openWhats(){
+
+document.getElementById("homeScreen")
+.classList.add("hidden");
+
+document.getElementById("whatsapp")
+.classList.remove("hidden");
+
+}
+
+/* SELECCIÓN DE FRASES */
+
+const phrases =
+document.querySelectorAll(".phrase");
+
+phrases.forEach(phrase=>{
+
+phrase.addEventListener("click",()=>{
+
+phrase.classList.toggle("selected");
+
+});
+
+});
+
+/* COMPROBAR */
+
+document.getElementById("checkBtn")
+.addEventListener("click",()=>{
+
+const selected =
+document.querySelectorAll(".phrase.selected");
+
+const redFlags =
+document.querySelectorAll(".phrase.redflag");
+
+let aciertos = 0;
+
+selected.forEach(item=>{
+
+if(item.classList.contains("redflag")){
+aciertos++;
+}
+
+});
+
+const porcentaje =
+(aciertos/redFlags.length)*100;
+
+
+if(porcentaje < 50){
+
+document.getElementById("errorRedFlags")
+.classList.remove("hidden");
+
+setTimeout(()=>{
+
+document.getElementById("errorRedFlags")
+.classList.add("hidden");
+
+},3000);
+
+return;
+}
+
+/* Revela todas */
+redFlags.forEach(flag=>{
+    flag.classList.add("reveal");
+});
+
+document.getElementById("feedback").classList.remove("hidden");
+
+document.getElementById("feedbackText").innerHTML = `
+<h3>✅ Explicación de las red flags</h3>
+
+<br>
+
+<b>"Eres mi alumna favorita 😉"</b>
+
+<br>
+
+Puede generar una relación de favoritismo y exclusividad que no es apropiada dentro del rol docente.
+
+<br><br>
+
+<b>"Podemos hablar más tranquilos en la noche 🌙"</b>
+
+<br>
+
+Buscar conversaciones privadas fuera del contexto académico y en horarios personales puede resultar inapropiado.
+
+<br><br>
+
+<b>"Prefiero que hablemos por aquí y no por el grupo 📱"</b>
+
+<br>
+
+Trasladar la comunicación a canales privados reduce la transparencia y dificulta la supervisión institucional.
+
+<br><br>
+
+<b>Revisa la mochila</b>
+
+
+`;
+
+document.getElementById("checkBtn").disabled=true;
+document.getElementById("checkBtn").style.opacity="0.6";
+
+});
+
+document
+.getElementById("teamsBtn")
+.addEventListener("click",()=>{
+
+document.getElementById("homeImage").src =
+"../Assets_scaperoom/Bocetos/puzzle2-chat/celular-pantalla-inicio-teams-hover.png";
+
+setTimeout(()=>{
+
+document.getElementById("popup")
+.classList.remove("hidden");
+
+},120);
+
+});
+
+document
+.getElementById("whatsappBtn")
+.addEventListener("click",()=>{
+
+document.getElementById("homeImage").src =
+"../Assets_scaperoom/Bocetos/puzzle2-chat/celular-pantalla-inicio-whasap-hover.png";
+
+setTimeout(()=>{
+
+openWhats();
+
+},120);
+
+});
+
+document
+.getElementById("popupOkBtn")
+.addEventListener("click",()=>{
+
+document.getElementById("popupImage").src =
+"../Assets_scaperoom/Bocetos/puzzle2-chat/celular-pantalla-inicio-teams-pop-up-hover.png";
+
+setTimeout(()=>{
+
+document.getElementById("popup")
+.classList.add("hidden");
+
+document.getElementById("homeImage").src =
+"../Assets_scaperoom/Bocetos/puzzle2-chat/celular-pantalla-inicio.png";
+
+},120);
+
+});
+</script>
+
+</body>
+</html>
